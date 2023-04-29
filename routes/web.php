@@ -106,7 +106,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permissions:2,3'])->group(function () {
         Route::get('/user/role/delete/{id}', [Admin::class, 'deleteRole'])->name('deleterole');
         Route::post('/user/addrole', [Admin::class, 'addRole'])->name('addRole');
-        Route::get('/Users/edit/{id}', [Admin::class, 'editUser'])->name('editUser');
+        Route::get('/University Professors/edit/{id}', [Admin::class, 'editUser'])->name('editUniversityProfessors');
         Route::get('/Staffs/edit/{id}', [Admin::class, 'editUser'])->name('editStaff');
         Route::post('/user/edit/save', [Admin::class, 'editUserSave'])->name('editusersave');
         Route::get('/user/permission/delete/{id}', [Admin::class, 'deletePermission'])->name('deletepermission');

@@ -183,8 +183,8 @@ class Admin extends Controller
         'name'=>'required',
         'addr'=>'required',
         'fulladdr'=>'required',
-        'phone'=>'required|unique:labmed,phone',
-        'fax'=>'required|unique:labmed,fax',
+        'phone'=>'required',
+        'fax'=>'required',
       ],
       [
         'name.required'=>'Please enter medical center name',
@@ -243,8 +243,8 @@ class Admin extends Controller
             'edtname'=>'required',
             'edtaddr'=>'required',
             'edtfulladdr'=>'required',
-            'edtphone'=>'required|unique:labmed,phone,'.$request->id,
-            'edtfax'=>'required|unique:labmed,fax,'.$request->id,
+            'edtphone'=>'required',
+            'edtfax'=>'required',
           ],
         [
           'edtname.required'=>'Please enter medical center name',
@@ -271,11 +271,12 @@ class Admin extends Controller
         return Requested::useraccepted($id);
     }
 
+
     public function RejectedOnline(Request $request){
-        return RequestReturn::RejectedOnline($request);
+        return Requested::RejectedOnline($request);
     }
     public function getRejectedOnline(){
-        $task=RequestReturn::all();
+        $task=Requested::with('getpendinglab')->with('getpendingbenef')->with('getcustomerpending')->where('Status','Returned')->get();
         return view('Admin.rejectedOnline', compact('task'));
     }
 
@@ -298,7 +299,7 @@ class Admin extends Controller
                         'email' => 'required|email|unique:users,email',
                         'password' => 'required',
                         'username' =>'required|unique:users,username',
-                        'phone' => 'required|unique:users,phone',
+                        'phone' => 'required',
                         'number' =>'required|unique:users,number',
                     ]);
                 }
@@ -308,7 +309,7 @@ class Admin extends Controller
             'password' => 'required',
             'role' => 'required',
             'username' =>'required|unique:users,username',
-            'phone' => 'required|unique:users,phone',
+            'phone' => 'required',
             ],
         );
         $data = $request->all();
@@ -408,7 +409,7 @@ class Admin extends Controller
         $request->validate([
             'fullname' => 'required',
             'email' => 'required|unique:users,email,'.$request->id,
-            'phone' => 'required|unique:users,phone,'.$request->id,
+            'phone' => 'required',
             'username' =>'required|unique:users,username,'.$request->id,
             'number' => 'nullable|unique:users,number,'.$request->id,
         ]);
@@ -435,7 +436,7 @@ class Admin extends Controller
         $request->validate([
             'fullname' => 'required',
             'email' => 'required|unique:users,email,'.Auth::user()->id,
-            'phone' => 'required|unique:users,phone,'.Auth::user()->id,
+            'phone' => 'required',
             'username' => 'required|unique:users,username,'.Auth::user()->id,
         ],
     );

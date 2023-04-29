@@ -62,6 +62,7 @@
                     <th style="width: 80px">Date</th>
                     <th>Prescription</th>
                     <th>Reason</th>
+                    <th>Returned Date</th>
                     <th>Checked By</th>
                   </tr>
                   </thead>
@@ -85,9 +86,9 @@
                         $i++;
                     @endphp
                     <td>{{ $i }}</td>
-                    <td>{{ $task->getlabmedOn->namee }}</td>
-                    <td>{{ $task->getCustomerOn->serial }}</td>
-                    <td>{{ $task->getBeneficiarynameOn->NAME }}</td>
+                    <td>{{ $task->getpendinglab->namee }}</td>
+                    <td>{{ $task->getcustomerpending->serial }}</td>
+                    <td>{{ $task->getpendingbenef->NAME }}</td>
                     <td>
                         <div class="form-group">
                             <select class="form-control select2 form" name="labmed" multiple disabled style="width: 100%;">
@@ -97,12 +98,13 @@
                             </select>
                         </div>
                     </td>
-                    <td>{{ date( 'd/m/Y',  strtotime($task->created_at)) }}</td>
+                    <td>{{ date( 'd/m/Y',  strtotime($task->date)) }}</td>
                     <td>
                         <button title="View" type="button" class="btn btn-outline-primary"   data-toggle="modal" data-target="#view{{ $task->id }}">
                             <i class="fas fa-image"></i></button>
                     </td>
                     <td>{{$task->reason}}</td>
+                    <td>{{$task->updated_at->format('d/m/Y H:i:s')}}</td>
                     <td>{{$task->getUser->fullname}}</td>
                     </tr>
 

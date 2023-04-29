@@ -13,12 +13,13 @@ use Image;
 use Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InfoEmail;
+use App\Mail\ReturnedReqEmail;
 
 class Requested extends Model
 {
     use HasFactory;
     protected $table='request';
-    protected $fillable=['serial','type','pat','status','labmed','date','image','imageType','userId'];
+    protected $fillable=['serial','type','pat','status','reason','labmed','date','image','imageType','userId'];
 
     public function getpendinglab(){
         return $this->hasOne(MedicalCenter::class,'id','labmed');
@@ -103,6 +104,9 @@ class Requested extends Model
         $task=Requested::find($id);
         $task->Status='Requested';
         $task->userId=Auth::User()->id;
+        $date = new DateTime('now');
+        $date->setTimezone(new DateTimeZone('Asia/Beirut'));
+        $task->updated_at=$date->format('Y-m-d H:i:s');
         $task->save();
         return back()->with('err','Record Accepted');
     }
@@ -176,5 +180,25 @@ class Requested extends Model
 
         $requested->delete();
         return back()->with('err','Result has been sent');
+    }
+
+    public static function RejectedOnline(Request $request){
+        $task=Requested::find($request->id);
+        $task->status='Returned';
+        $task->reason=$request->reason;
+        $task->userId = Auth::User()->id;
+        $date = new DateTime('now');
+        $date->setTimezone(new DateTimeZone('Asia/Beirut'));
+        $task->updated_at=$date->format('Y-m-d H:i:s');
+        $task->save();
+
+        $mailData = [
+            'title' => 'Your request has been returned',
+            'body' => $task->getUserInfo->fullname,
+        ];
+        $reason = $request->reason;
+        Mail::to($task->getUserInfo->email)->send(new ReturnedReqEmail($mailData,$reason));
+
+        return back()->with('err','Record has been Returned.');
     }
 }

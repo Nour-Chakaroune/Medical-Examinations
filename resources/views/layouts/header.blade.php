@@ -179,7 +179,7 @@
                     <a href="/task/returned/online" class="nav-link @if(Route::currentRouteName()=='returnedonline') active @endif">
                         <i class="fas fa-undo" style="color: red"></i>
                       <p>Returned</p>
-                      <span class="right badge bg-gradient-danger badge-danger">{{ DB::table('RequestReturn')->count() }}</span>
+                      <span class="right badge bg-gradient-danger badge-danger">{{ DB::table('request')->where('Status','Returned')->count() }}</span>
                     </a>
                 </li>
                 @endif

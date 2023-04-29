@@ -53,7 +53,7 @@ class CustomAuthController extends Controller
         else{
         return back()->withErrors('Login details are not valid');
     }
-}
+    }
     public function dashboard()
     {
             return view('Admin.dashboard');
